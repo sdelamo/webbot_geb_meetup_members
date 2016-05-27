@@ -1,6 +1,8 @@
-import geb.Browser
+import groovy.transform.Canonical
 
+@Canonical
 class MeetupMember implements TraitAsCSV {
+    String memberId
     String name
     String locality
     String twitter
@@ -9,18 +11,4 @@ class MeetupMember implements TraitAsCSV {
     String background
     String imageUrl
     String website
-
-    static def populate(MeetupMember member ) {
-        Browser.drive {
-            go member.website
-            at MeetupMemberPage
-            member.name = fullName
-            member.twitter = twitter
-            member.facebook = facebook
-            member.tumblr = tumblr
-            member.imageUrl = imageUrl
-            member.locality = locality
-            member.background = background
-        }
-    }
 }

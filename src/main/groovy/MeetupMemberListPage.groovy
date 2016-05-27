@@ -1,17 +1,31 @@
 import geb.Page
 
 class MeetupMemberListPage extends Page {
+
+    static url = '/es-ES/'
+
+    String convertToPath(Object[] args) {
+        if ( args.size() >= 1 ) {
+            return "${ args[0] }/members"
+        }
+    }
+
     static content = {
-        personLinks { $("#memberList h4 a") }
+        personLinks { $('#memberList h4 a') }
         pagination {
-            module Pagination, $("ul.nav-pagination")
+            module Pagination, $('ul.nav-pagination')
         }
     }
 
     List<Map> persons() {
         personLinks.collect {
             def el = it.getElement(0)
-           [name: el.text, href: el.getAttribute('href')]
+            def href = el.getAttribute('href')
+            new MeetupMember(name: el.text, memberId: memberIdFromHref(href))
         }
+    }
+
+    static String memberIdFromHref(String href) {
+        href.split('/').last()
     }
 }

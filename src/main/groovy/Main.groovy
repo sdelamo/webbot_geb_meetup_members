@@ -1,21 +1,18 @@
-import geb.Browser
-
 class Main {
 
+    @SuppressWarnings('JavaIoPackageAccess')
     static void main(String[] args) {
 
-        def meetupUrl = 'http://www.meetup.com/Warsaw-Groovy-User-Group/'
-
         def directory = '/Users/softamo/Downloads'
-        def fileName = 'WarsawGroovyMeetupMembers'
+        def fileName = 'Warsaw-Groovy-User-Group'
         def extension = '.csv'
         def filepath = "$directory/$fileName$extension"
 
-        List<MeetupMember> allMembers = MeetupMembersFetcher.fetchMembers(meetupUrl)
+        Collection<MeetupMember> allMembers = MeetupMembersFetcher.fetchMembers(fileName)
 
-        if(!allMembers.isEmpty()) {
+        if ( !allMembers.isEmpty() ) {
             new File(filepath).withWriter { out ->
-                out println "${allMembers.first().csvHeaders()}"
+                out println "${ allMembers.first().csvHeaders() }"
                 allMembers.each {
                     out.println it.asCSV()
                 }

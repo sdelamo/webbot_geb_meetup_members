@@ -4,10 +4,11 @@ class MeetupMemberSpec extends Specification {
 
     def "populate a member who has all of its data filled"() {
         given:
-        MeetupMember member = new MeetupMember(website: 'http://www.meetup.com/es-ES/Warsaw-Groovy-User-Group/members/81585302/')
+        def meetupGroup = new MeetupGroup(groupSlug: 'Warsaw-Groovy-User-Group')
+        def member = new MeetupMember(memberId: '81585302')
 
         when:
-        MeetupMember.populate(member)
+        MeetupMembersFetcher.populateMember(member,meetupGroup.groupSlug)
 
         then:
         member.locality == 'Warsaw'
@@ -18,8 +19,8 @@ class MeetupMemberSpec extends Specification {
         member.name == 'Paweł S. P.'
 
         when:
-        member = new MeetupMember(website: 'http://www.meetup.com/es-ES/Warsaw-Groovy-User-Group/members/28938802/')
-        MeetupMember.populate(member)
+        member = new MeetupMember(memberId: '28938802')
+        MeetupMembersFetcher.populateMember(member, meetupGroup.groupSlug)
 
         then:
         member.locality == 'Warsaw'
@@ -46,12 +47,12 @@ class MeetupMemberSpec extends Specification {
         String csvHeaders = m.csvHeaders()
 
         then:
-        csvHeaders == 'imageUrl;locality;twitter;tumblr;facebook;background;name;website'
+        csvHeaders == 'imageUrl;locality;twitter;memberId;tumblr;facebook;background;name;website'
 
         when:
         def csv = m.asCSV()
 
         then:
-        csv == "http://photos4.meetupstatic.com/photos/member/c/d/6/b/member_254392587.jpeg;Guadalajara;https://twitter.com/sdelamo;;;;Sergio del Amo;http://www.meetup.com/es-ES/Warsaw-Groovy-User-Group/members/200767921/"
+        csv == "http://photos4.meetupstatic.com/photos/member/c/d/6/b/member_254392587.jpeg;Guadalajara;https://twitter.com/sdelamo;;;;;Sergio del Amo;http://www.meetup.com/es-ES/Warsaw-Groovy-User-Group/members/200767921/"
     }
 }

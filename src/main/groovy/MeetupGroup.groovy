@@ -1,0 +1,3 @@
+class MeetupGroup {
+    String groupSlug
+}

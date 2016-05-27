@@ -1,39 +1,117 @@
-repositories {
-    jcenter()
-}
+import org.apache.tools.ant.taskdefs.condition.Os
 
-dependencies {
+ext {
+    drivers = ['firefox', 'chrome', 'phantomJs']
 
+    groovyVersion = '2.4.6'
+    spockCoreVersion = '1.0-groovy-2.4'
+    gebVersion = '0.13.1'
+    seleniumVersion = '2.53.0'
+    chromeDriverVersion = '2.19'
+    phantomJsVersion = '2.1.1'
+    phantomJsDriverVersion = '1.2.1'
+    sqliteVersion = '3.8.11.2'
+    ddPlistVersion = '1.16'
+    gebwebbotCoreVersion = '0.1'
 }
 
 buildscript {
-    repositories { jcenter() }
+    repositories {
+        jcenter()
+    }
     dependencies {
-        classpath 'com.github.jengelman.gradle.plugins:shadow:1.2.2'
+        classpath 'com.github.jengelman.gradle.plugins:shadow:1.2.3'
     }
 }
 
-apply plugin: 'java'
-apply plugin: 'groovy'
+apply plugin: "groovy"
+apply plugin: "codenarc"
+apply from: "gradle/osSpecificDownloads.gradle"
 apply plugin: 'application'
 apply plugin: 'com.github.johnrengelman.shadow'
 
 mainClassName = "Main"
 
+
 repositories {
     jcenter()
 }
 
 dependencies {
-    compile 'org.codehaus.groovy:groovy-all:2.4.4'
-    compile 'org.seleniumhq.selenium:selenium-support:2.48.2'
-    compile 'org.seleniumhq.selenium:selenium-firefox-driver:2.48.2'
-    compile 'org.codehaus.geb:geb-core:0.7.2'
-    testCompile "org.spockframework:spock-core:1.0-groovy-2.4"
+    compile "org.gebish:geb-core:$gebVersion"
+    compile "org.codehaus.groovy:groovy-all:$groovyVersion"
+    testCompile("org.spockframework:spock-core:$spockCoreVersion") {
+        exclude group: "org.codehaus.groovy"
+    }
+    // Drivers
+    compile "org.seleniumhq.selenium:selenium-chrome-driver:$seleniumVersion"
+    compile "org.seleniumhq.selenium:selenium-firefox-driver:$seleniumVersion"
+    compile("com.codeborne:phantomjsdriver:$phantomJsDriverVersion") {
+        transitive = false
+    }
+
+    runtime "org.xerial:sqlite-jdbc:$sqliteVersion"
+
+    compile "com.googlecode.plist:dd-plist:$ddPlistVersion"
+
+    compile "groovycalamari.gebwebbot:gebwebbot_core:$gebwebbotCoreVersion"
 }
 
-tasks.withType(Test) {
-    testLogging {
-        exceptionFormat "full"
+codenarcMain {
+    ignoreFailures false
+    configFile file('codenarc/codenarc.groovy')
+}
+
+codenarcTest {
+    ignoreFailures false
+    configFile file('codenarc/codenarcTest.groovy')
+}
+
+drivers.each { driver ->
+    task "${driver}Test"(type: Test) {
+        reports {
+            html.destination = reporting.file("$name/tests")
+            junitXml.destination = file("$buildDir/test-results/$name")
+        }
+
+        outputs.upToDateWhen { false }  // Always run tests
+
+        systemProperty "geb.build.reportsDir", reporting.file("$name/geb")
+        systemProperty "geb.env", driver
     }
 }
+
+chromeTest {
+    dependsOn setUpChromeDriver
+
+    def chromedriverFilename = Os.isFamily(Os.FAMILY_WINDOWS) ? "chromedriver.exe" : "chromedriver"
+    systemProperty "webdriver.chrome.driver", new File(setUpChromeDriver.outputs.files.singleFile, chromedriverFilename).absolutePath
+}
+
+phantomJsTest {
+    dependsOn setUpPhantomJs
+
+    def phantomJsFilename = Os.isFamily(Os.FAMILY_WINDOWS) ? "phantomjs.exe" : "bin/phantomjs"
+    systemProperty "phantomjs.binary.path", new File(setUpPhantomJs.outputs.files.singleFile, phantomJsFilename).absolutePath
+}
+
+test {
+    dependsOn drivers.collect { tasks["${it}Test"] }
+    enabled = false
+    testLogging {
+        showStandardStreams = true
+    }
+}
+
+configure(phantomJsTest) {
+    group =  JavaBasePlugin.VERIFICATION_GROUP
+}
+
+configure(firefoxTest) {
+    group =  JavaBasePlugin.VERIFICATION_GROUP
+}
+
+configure(chromeTest) {
+    group =  JavaBasePlugin.VERIFICATION_GROUP
+}
+

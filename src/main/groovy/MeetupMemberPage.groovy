@@ -2,8 +2,28 @@ import geb.Page
 
 class MeetupMemberPage extends Page {
 
-    static final List<String> FACEBOOK_ROOT_URLS = ['https://facebook.com/','http://facebook.com/', 'https://www.facebook.com/','http://www.facebook.com/']
-    static final List<String> TWITTER_ROOT_URLS = ['https://twitter.com/','http://twitter.com/', 'https://www.twitter.com/','http://www.twitter.com/']
+    static url = '/es-ES/'
+
+    String convertToPath(Object[] args) {
+        if ( args.size() >= 2 ) {
+            return "${ args[0] }/members/${ args[1] }"
+        }
+    }
+
+    static at = { true }
+
+    static final FACEBOOK_ROOT_URLS = [
+            'https://facebook.com/',
+            'http://facebook.com/',
+            'https://www.facebook.com/',
+            'http://www.facebook.com/'
+    ]
+    static final TWITTER_ROOT_URLS = [
+            'https://twitter.com/',
+            'http://twitter.com/',
+            'https://www.twitter.com/',
+            'http://www.twitter.com/'
+    ]
 
     static content = {
 
@@ -20,7 +40,7 @@ class MeetupMemberPage extends Page {
             $('#D_groupMemberProfile a').each {
                 def webElement = it.getElement(0)
                 def href = webElement.getAttribute('href')
-                if( TWITTER_ROOT_URLS.any { href?.startsWith(it) } ) {
+                if ( TWITTER_ROOT_URLS.any { href?.startsWith(it) } ) {
                     t = href
                 }
             }
@@ -32,7 +52,7 @@ class MeetupMemberPage extends Page {
             $('#D_groupMemberProfile a').each {
                 def webElement = it.getElement(0)
                 def href = webElement.getAttribute('href')
-                if( FACEBOOK_ROOT_URLS.any { href?.startsWith(it) } ) {
+                if ( FACEBOOK_ROOT_URLS.any { href?.startsWith(it) } ) {
                     f = href
                 }
             }
@@ -45,7 +65,7 @@ class MeetupMemberPage extends Page {
                 def webElement = it.getElement(0)
                 def href = webElement.getAttribute('href')
                 def attrTitle = webElement.getAttribute('title')
-                if( attrTitle == 'Tumblr' ) {
+                if ( attrTitle == 'Tumblr' ) {
                     t = href
                 }
             }
@@ -74,13 +94,13 @@ class MeetupMemberPage extends Page {
             def memberBackground
             $('.D_memberProfileContentItem').each {
                 def webElement = it.getElement(0)
-                def text = webElement.getText()
-                if(!text?.startsWith('Location')) {
+                def text = webElement.text
+                if (!text?.startsWith('Location') ) {
                     memberBackground += ' ' + text  ?: ''
                 }
 
             }
-            memberBackground.replace('\n', ' ')
+            memberBackground?.replace('\n', ' ')
         }
     }
 }

@@ -2,13 +2,19 @@ import spock.lang.Specification
 
 class MeetupMembersFetcherSpec extends Specification {
 
-    def "retriving every member shoudl retrieve the organizer too"() {
-
-        given:
-        def meetupGroupUrl = 'http://www.meetup.com/Warsaw-Groovy-User-Group/'
-
+    def "every memeber fethed should have a memberId"() {
         when:
-        def members = MeetupMembersFetcher.fetchMembers(meetupGroupUrl)
+        def members = MeetupMembersFetcher.harvestLinks('Warsaw-Groovy-User-Group')
+
+        then:
+        members.each {
+            assert it.memberId
+        }
+
+    }
+    def "retriving every member should retrieve the organizer too"() {
+        when:
+        def members = MeetupMembersFetcher.fetchMembers('Warsaw-Groovy-User-Group')
 
         then:
         members
