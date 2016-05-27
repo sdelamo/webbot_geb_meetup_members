@@ -13,3 +13,5 @@ gradle
 gradlew
 gradlew.bat
 ms_meetup_download.iml
+.idea
+webdrivers
