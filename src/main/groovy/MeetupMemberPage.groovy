@@ -2,7 +2,7 @@ import geb.Page
 
 class MeetupMemberPage extends Page {
 
-    static url = '/es-ES/'
+    static url = '/en-US/'
 
     String convertToPath(Object[] args) {
         if ( args.size() >= 2 ) {
