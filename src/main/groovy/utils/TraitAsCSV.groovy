@@ -1,3 +1,5 @@
+package utils
+
 trait TraitAsCSV {
     List<String> propertyNames() {
         this.metaClass.properties*.name.findAll { it != 'class' }

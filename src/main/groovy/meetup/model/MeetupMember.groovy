@@ -1,4 +1,7 @@
+package meetup.model
+
 import groovy.transform.Canonical
+import utils.TraitAsCSV
 
 @Canonical
 class MeetupMember implements TraitAsCSV {

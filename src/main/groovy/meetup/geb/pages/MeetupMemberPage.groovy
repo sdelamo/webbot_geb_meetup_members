@@ -1,3 +1,5 @@
+package meetup.geb.pages
+
 import geb.Page
 
 class MeetupMemberPage extends Page {

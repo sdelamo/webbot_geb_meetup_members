@@ -1,3 +1,6 @@
+import meetup.geb.MeetupMembersFetcher
+import meetup.model.MeetupGroup
+import meetup.model.MeetupMember
 import spock.lang.Specification
 
 class MeetupMemberSpec extends Specification {

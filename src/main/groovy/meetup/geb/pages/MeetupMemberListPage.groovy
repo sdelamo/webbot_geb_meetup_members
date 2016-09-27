@@ -1,4 +1,7 @@
+package meetup.geb.pages
+
 import geb.Page
+import meetup.model.MeetupMember
 
 class MeetupMemberListPage extends Page {
 

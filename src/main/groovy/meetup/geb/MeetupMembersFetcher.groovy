@@ -1,26 +1,27 @@
+package meetup.geb
+
 import geb.Browser
+import meetup.geb.pages.MeetupMemberListPage
+import meetup.geb.pages.MeetupMemberPage
+import meetup.model.MeetupMember
+import meetup.model.MeetupWebsite
+import utils.Delayable
 
-class MeetupMembersFetcher {
+class MeetupMembersFetcher implements Delayable {
 
-    @SuppressWarnings('InsecureRandom')
-    static randomDelay(def from, def to) {
-        Math.abs(new Random().nextInt() % to) + from
-    }
-
-    static delay() {
-        sleep(randomDelay(1000, 4000))
-    }
-
+    @SuppressWarnings('Println')
     static Collection<MeetupMember> fetchMembers(String groupSlug) {
 
         def allMembers = harvestLinks(groupSlug)
         allMembers.each {
+            println "visiting member ${it.memberId}"
             populateMember(it, groupSlug)
             delay()
         }
         allMembers
     }
 
+    @SuppressWarnings('Println')
     static Set<MeetupMember> harvestLinks(String groupSlug) {
         def allMembers = [] as Set<MeetupMember>
         Browser.drive(baseUrl: MeetupWebsite.BASE_URL) {
@@ -33,6 +34,7 @@ class MeetupMembersFetcher {
                     break
                 }
                 delay()
+                println 'going to next page'
                 pagination.nextPage()
             }
         }

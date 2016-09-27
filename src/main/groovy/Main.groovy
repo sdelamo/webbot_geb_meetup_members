@@ -1,4 +1,6 @@
 import groovy.transform.CompileStatic
+import meetup.geb.MeetupMembersFetcher
+import meetup.model.MeetupMember
 
 @CompileStatic
 class Main {

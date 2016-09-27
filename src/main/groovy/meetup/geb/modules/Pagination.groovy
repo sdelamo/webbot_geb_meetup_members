@@ -1,4 +1,7 @@
+package meetup.geb.modules
+
 import geb.Module
+import utils.Paginator
 
 class Pagination extends Module implements Paginator {
 

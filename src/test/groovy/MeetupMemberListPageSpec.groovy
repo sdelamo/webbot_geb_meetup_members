@@ -1,3 +1,4 @@
+import meetup.geb.pages.MeetupMemberListPage
 import spock.lang.Specification
 import spock.lang.Unroll
 

@@ -1,3 +1,5 @@
+package utils
+
 interface Paginator {
 
     void toPage(int pageNumber)
