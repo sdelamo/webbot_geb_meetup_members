@@ -1,6 +1,7 @@
 package meetup.geb.pages
 
 import geb.Page
+import meetup.geb.modules.Pagination
 import meetup.model.MeetupMember
 
 class MeetupMemberListPage extends Page {
