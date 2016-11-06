@@ -16,9 +16,7 @@ class MeetupMemberListPage extends Page {
 
     static content = {
         personLinks { $('#memberList h4 a') }
-        pagination {
-            module Pagination, $('ul.nav-pagination')
-        }
+        pagination { $('ul.nav-pagination').module(Pagination) }
     }
 
     List<Map> persons() {
