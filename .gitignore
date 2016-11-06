@@ -16,3 +16,4 @@ ms_meetup_download.iml
 .idea
 webdrivers
 /phantomjsdriver.log
+.DS_Store
