@@ -10,9 +10,9 @@ import utils.Delayable
 class MeetupMembersFetcher implements Delayable {
 
     @SuppressWarnings('Println')
-    static Collection<MeetupMember> fetchMembers(String groupSlug) {
+    static Collection<MeetupMember> fetchMembers(String groupSlug, int stopAt = -1) {
 
-        def allMembers = harvestLinks(groupSlug)
+        def allMembers = harvestLinks(groupSlug, stopAt)
         allMembers.each {
             println "visiting member ${it.memberId}"
             populateMember(it, groupSlug)
@@ -22,8 +22,9 @@ class MeetupMembersFetcher implements Delayable {
     }
 
     @SuppressWarnings('Println')
-    static Set<MeetupMember> harvestLinks(String groupSlug) {
+    static Set<MeetupMember> harvestLinks(String groupSlug, int stopAt = -1) {
         def allMembers = [] as Set<MeetupMember>
+        int pages = 0
         Browser.drive(baseUrl: MeetupWebsite.BASE_URL) {
 
             to MeetupMemberListPage, groupSlug
@@ -35,6 +36,10 @@ class MeetupMembersFetcher implements Delayable {
                 }
                 delay()
                 println 'going to next page'
+                pages++
+                if ( stopAt > 0 && pages >= stopAt) {
+                    break
+                }
                 pagination.nextPage()
             }
         }

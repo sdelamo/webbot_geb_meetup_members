@@ -5,7 +5,7 @@ class MeetupMembersFetcherSpec extends Specification {
 
     def "every memeber fethed should have a memberId"() {
         when:
-        def members = MeetupMembersFetcher.harvestLinks('Warsaw-Groovy-User-Group')
+        def members = MeetupMembersFetcher.harvestLinks('Warsaw-Groovy-User-Group', 2)
 
         then:
         members.each {
@@ -15,7 +15,7 @@ class MeetupMembersFetcherSpec extends Specification {
     }
     def "retriving every member should retrieve the organizer too"() {
         when:
-        def members = MeetupMembersFetcher.fetchMembers('Warsaw-Groovy-User-Group')
+        def members = MeetupMembersFetcher.fetchMembers('Warsaw-Groovy-User-Group', 2)
 
         then:
         members
