@@ -13,6 +13,8 @@ ext {
     sqliteVersion = '3.8.11.2'
     ddPlistVersion = '1.16'
     gebwebbotCoreVersion = '0.1'
+    htmlUnitDriverVersion = '2.47.1'
+    htmlUnitVersion = '2.18'
 }
 
 buildscript {
@@ -44,6 +46,8 @@ dependencies {
         exclude group: "org.codehaus.groovy"
     }
     // Drivers
+    compile "org.seleniumhq.selenium:selenium-htmlunit-driver:$htmlUnitDriverVersion"
+    compile "net.sourceforge.htmlunit:htmlunit:$htmlUnitVersion"
     compile "org.seleniumhq.selenium:selenium-chrome-driver:$seleniumVersion"
     compile "org.seleniumhq.selenium:selenium-firefox-driver:$seleniumVersion"
     compile("com.codeborne:phantomjsdriver:$phantomJsDriverVersion") {

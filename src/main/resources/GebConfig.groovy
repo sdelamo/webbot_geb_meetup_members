@@ -1,7 +1,7 @@
-
 import org.openqa.selenium.chrome.ChromeDriver
 import org.openqa.selenium.firefox.FirefoxDriver
 import org.openqa.selenium.firefox.FirefoxProfile
+import org.openqa.selenium.htmlunit.HtmlUnitDriver
 import org.openqa.selenium.phantomjs.PhantomJSDriver
 
 import static org.openqa.selenium.remote.DesiredCapabilities.firefox
@@ -11,6 +11,10 @@ waiting {
 }
 
 environments {
+
+    htmlUnit {
+        driver = { new HtmlUnitDriver() }
+    }
 
     // run via “./gradlew chromeTest”
     // See: http://code.google.com/p/selenium/wiki/ChromeDriver
